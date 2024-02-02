@@ -6,27 +6,27 @@ import java.util.Scanner;
 import java.util.TreeSet;
 
 public class FifthTask {
+
+    HashMap<Integer, TreeSet<Integer>> rooms = new HashMap<>();
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int numberRooms = Integer.parseInt(scanner.nextLine());
-        HashMap<Integer, TreeSet<Integer>> rooms = new HashMap<>();
+        FifthTask fifthTask = new FifthTask();
         for (int i = 1; i <= numberRooms; i++) {
-            rooms.put(i, new TreeSet<>());
+            fifthTask.rooms.put(i, new TreeSet<>());
         }
         for (int i = 0; i < numberRooms - 1; i++) {
             String[] data = scanner.nextLine().split(" ");
             int firstRoom = Integer.parseInt(data[0]);
             int secondRoom = Integer.parseInt(data[1]);
-            TreeSet<Integer> nextFirstRooms = rooms.get(firstRoom);
+            TreeSet<Integer> nextFirstRooms = fifthTask.rooms.get(firstRoom);
             nextFirstRooms.add(secondRoom);
-            rooms.put(firstRoom, nextFirstRooms);
-            TreeSet<Integer> nextSecondRooms = rooms.get(secondRoom);
+            fifthTask.rooms.put(firstRoom, nextFirstRooms);
+            TreeSet<Integer> nextSecondRooms = fifthTask.rooms.get(secondRoom);
             nextSecondRooms.add(firstRoom);
-            rooms.put(secondRoom, nextSecondRooms);
+            fifthTask.rooms.put(secondRoom, nextSecondRooms);
         }
-
-        System.out.println(rooms);
-
 
         int numberQuestions = Integer.parseInt(scanner.nextLine());
         for (int i = 0; i < numberQuestions; i++) {
@@ -34,36 +34,31 @@ public class FifthTask {
             int start = Integer.parseInt(data[0]);
             int finish = Integer.parseInt(data[1]);
 
-            ArrayList<Integer> nextRooms = new ArrayList<>(rooms.get(start));
-            int minSteps = Integer.MAX_VALUE;
-            int minNumberRoom;
+            ArrayList<Integer> nextRooms = new ArrayList<>(fifthTask.rooms.get(start));
 
-            for (int j = 0; j < nextRooms.size(); j++) {
-                int steps = 1;
-                if (finish == nextRooms.get(j)) {
-                    minSteps = steps;
-                    minNumberRoom = nextRooms.get(j);
+            for (Integer nextRoom : nextRooms) {
+                if (nextRoom == finish) {
+                    System.out.println(finish);
                     break;
+                } else {
+                    fifthTask.findRoom(nextRoom, finish, nextRoom, start);
                 }
-                HashMap<Integer, TreeSet<Integer>> cloneRooms = (HashMap<Integer, TreeSet<Integer>>) rooms.clone();
-                ArrayList<Integer> nextPath = new ArrayList<>(cloneRooms.get(j));
-                cloneRooms.remove(j);
+            }
+        }
+    }
 
-                while (!nextPath.isEmpty()) {
-                    int nextNumber = nextPath.get(nextRooms.size() - 1);
-                    if (finish == nextNumber) {
-                        if (steps < minSteps) {
-                            minSteps = steps;
-                            minNumberRoom = nextRooms.get(j);
-                        }
-                        break;
-                    } else {
-                        nextPath.remove(nextPath.size() - 1);
-                        nextPath.addAll(rooms.get(nextNumber));
-                    }
+    public void findRoom(int start, int finishRoom, int answer, int prev) {
+        ArrayList<Integer> nextRooms = new ArrayList<>(rooms.get(start));
+
+        for (int room : nextRooms) {
+            if (room == finishRoom) {
+                System.out.println(answer);
+                break;
+            } else {
+                if (room != prev) {
+                    findRoom(room, finishRoom, answer, start);
                 }
             }
         }
     }
 }
-

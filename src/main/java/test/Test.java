@@ -16,5 +16,7 @@ public class Test {
         //int t= numbers.stream().mapToInt(x->{if (x%2==0) return x*x}).sum();
         int t = numbers.stream().mapToInt(x -> x % 2 == 0 ? x * x : 0).sum();
         System.out.println(t);
+        Test test = new Test();
+        test.hashCode();
     }
 }

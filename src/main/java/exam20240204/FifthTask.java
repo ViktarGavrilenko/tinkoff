@@ -17,19 +17,19 @@ public class FifthTask {
             dictionary.put(str.charAt(i), dictionary.get(str.charAt(i)) + 1);
         }
 
-        HashMap<Integer, Integer> sadness = new HashMap<>();
-        sadness.put(0, 0);
-        sadness.put(1, 0);
-        sadness.put(2, 1);
+        int[] arrSadness = new int[300001];
+        arrSadness[0] = 0;
+        arrSadness[1] = 0;
+        arrSadness[2] = 1;
+
         for (int i = 3; i < 300001; i++) {
-            sadness.put(i, (sadness.get(i - 1)) + i - 1);
+            arrSadness[i] = arrSadness[i - 1] + i - 1;
         }
         int ans = 0;
         for (Map.Entry<Character, Integer> entry : dictionary.entrySet()) {
             Integer value = entry.getValue();
-            ans += sadness.get(value);
+            ans += arrSadness[value];
         }
         System.out.println(ans);
-
     }
 }

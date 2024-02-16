@@ -1,7 +1,5 @@
 package exam20240204;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class FifthTask {
@@ -9,13 +7,6 @@ public class FifthTask {
         Scanner scanner = new Scanner(System.in);
         int l = Integer.parseInt(scanner.nextLine());
         String str = scanner.nextLine();
-        HashMap<Character, Integer> dictionary = new HashMap<>();
-        for (int i = 0; i < 26; i++) {
-            dictionary.put((char) (97 + i), 0);
-        }
-        for (int i = 0; i < str.length(); i++) {
-            dictionary.put(str.charAt(i), dictionary.get(str.charAt(i)) + 1);
-        }
 
         int[] arrSadness = new int[300001];
         arrSadness[0] = 0;
@@ -26,9 +17,19 @@ public class FifthTask {
             arrSadness[i] = arrSadness[i - 1] + i - 1;
         }
         int ans = 0;
-        for (Map.Entry<Character, Integer> entry : dictionary.entrySet()) {
-            Integer value = entry.getValue();
-            ans += arrSadness[value];
+        int similar = 1;
+        for (int i = 1; i < l; i++) {
+            if (str.charAt(i) == str.charAt(i - 1)) {
+                similar++;
+            } else {
+                if (similar > 1) {
+                    ans += arrSadness[similar];
+                }
+                similar = 1;
+            }
+        }
+        if (similar > 1) {
+            ans += arrSadness[similar];
         }
         System.out.println(ans);
     }
